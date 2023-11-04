@@ -20,7 +20,7 @@ const getPostsByAutor = async (req,res) => {
         const [authorPosts] = await PostsModel.selectPostByAuthorId(authorId)
         res.json(authorPosts)
     } catch (error) {
-        
+        res.json({fatal: error.message})
     }
 }
 
