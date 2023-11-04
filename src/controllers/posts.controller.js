@@ -1,21 +1,26 @@
 const PostsModel = require('../models/posts.model')
+const AutoresModel = require('../models/autores.model')
 
 const getAllPosts = async (req,res) => {
     try {
-        const [result] = await PostsModel.selectAllPosts()
-        res.json(result)
+        const [posts] = await PostsModel.selectAllPosts()
+        for(let post of posts){
+            const [autores] = await AutoresModel.selectAutoresByPosts(post.autor_id)
+            post.autor = autores
+         }
+        res.json(posts)
     } catch (error) {
-        res.json({falat: error.message})
+        res.json({fatal: error.message})
     }
 }
 
-const getPostById = async (req,res) => {
+const getPostsByAutor = async (req,res) => {
     try {
-        const {postId} = req.params
-        const [result] = await PostsModel.selectPostById(postId)
-        res.json(result[0])
+        const {authorId} = req.params
+        const [authorPosts] = await PostsModel.selectPostByAuthorId(authorId)
+        res.json(authorPosts)
     } catch (error) {
-        res.json({falat: error.message})
+        
     }
 }
 
@@ -54,4 +59,4 @@ const deleteAuthorPosts = (AuthorId) => {
     return db.query("delete from posts where autor_id=?",[AuthorId])
 }
 
-module.exports = {getAllPosts,getPostById,createPost,updatePost,deletePost,deleteAuthorPosts}
+module.exports = {getAllPosts,createPost,updatePost,deletePost,deleteAuthorPosts,getPostsByAutor}

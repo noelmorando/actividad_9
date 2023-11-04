@@ -6,6 +6,11 @@ const selectAllPosts = () => {
 
 const selectPostById = (id) => {
     return db.query('select * from posts where id=?',[id])
+    
+}
+
+const selectPostByAuthorId = (id) => {
+    return db.query('select * from posts where autor_id=?',[id])
 }
 
 const insertPost = ({titulo, descripcion, categoria, autor_id}) => {
@@ -28,4 +33,4 @@ const deleteAuthorPosts = (AuthorId) => {
     return db.query("delete from posts where autor_id=?",[AuthorId])
 }
 
-module.exports = {selectAllPosts, insertPost,selectPostById,updatePostById,deletePostById,deleteAuthorPosts}
+module.exports = {selectAllPosts, insertPost,selectPostById,updatePostById,deletePostById,deleteAuthorPosts,selectPostByAuthorId}
